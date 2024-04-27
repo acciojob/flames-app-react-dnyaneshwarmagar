@@ -10,16 +10,31 @@ const App = () => {
     const calculateRelationship = () => {
         const lowerName1 = name1.toLowerCase();
         const lowerName2 = name2.toLowerCase();
-
-        const filteredName1 = lowerName1.split('').filter(char => !lowerName2.includes(char)).join('');
-        const filteredName2 = lowerName2.split('').filter(char => !lowerName1.includes(char)).join('');
-
+      
+        // Remove common letters between the names
+        let filteredName1 = '';
+        let filteredName2 = '';
+      
+        for (let char of lowerName1) {
+          if (!lowerName2.includes(char)) {
+            filteredName1 += char;
+          }
+        }
+      
+        for (let char of lowerName2) {
+          if (!lowerName1.includes(char)) {
+            filteredName2 += char;
+          }
+        }
+      
+        // Calculate the sum of the lengths of the remaining strings
         const totalLength = filteredName1.length + filteredName2.length;
-
+      
+        // Determine the relationship status based on the modulus by 6
         const relationshipIndex = totalLength % 6;
         const relationships = ['Siblings', 'Friends', 'Love', 'Affection', 'Marriage', 'Enemy'];
         const relationshipStatus = relationships[relationshipIndex];
-
+      
         setRelationship(relationshipStatus);
     };
 
