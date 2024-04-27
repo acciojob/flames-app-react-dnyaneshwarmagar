@@ -51,7 +51,7 @@ const App = () => {
             />
             <button onClick={calculateRelationship} data-testid="calculate_relationship">Calculate Relationship</button>
             <button onClick={clearInputs} data-testid="clear">Clear</button>
-            <h3 data-testid="answer">{relationship || 'Please enter valid input'}</h3>
+            <h3 data-testid="answer">{relationship }</h3>
         </div>
     );
 };
