@@ -8,33 +8,26 @@ const App = () => {
     const [relationship, setRelationship] = useState('');
 
     const calculateRelationship = () => {
-        const lowerName1 = name1.toLowerCase();
-  const lowerName2 = name2.toLowerCase();
+         // Create frequency maps for both names
+  const frequencyMap1 = countCharacterOccurrences(name1);
+  const frequencyMap2 = countCharacterOccurrences(name2);
 
-  // Create frequency maps for both names
-  const frequencyMap1 = {};
-  const frequencyMap2 = {};
+        let filteredName1 = '';
+  let filteredName2 = '';
 
-  // Populate frequency map for name1
-  for (let char of lowerName1) {
-    frequencyMap1[char] = (frequencyMap1[char] || 0) + 1;
-  }
-
-  // Populate frequency map for name2
-  for (let char of lowerName2) {
-    frequencyMap2[char] = (frequencyMap2[char] || 0) + 1;
-  }
-
-  // Create copies of the names to modify
-  let filteredName1 = lowerName1;
-  let filteredName2 = lowerName2;
-
-  // Remove common letters considering occurrence
   for (let char in frequencyMap1) {
     if (frequencyMap2[char]) {
       const minOccurrence = Math.min(frequencyMap1[char], frequencyMap2[char]);
-      filteredName1 = filteredName1.replace(new RegExp(char, 'g'), '').slice(0, minOccurrence);
-      filteredName2 = filteredName2.replace(new RegExp(char, 'g'), '').slice(0, minOccurrence);
+      filteredName1 += char.repeat(minOccurrence);
+      filteredName2 += char.repeat(minOccurrence);
+    } else {
+      filteredName1 += char.repeat(frequencyMap1[char]);
+    }
+  }
+
+  for (let char in frequencyMap2) {
+    if (!frequencyMap1[char]) {
+      filteredName2 += char.repeat(frequencyMap2[char]);
     }
   }
 
@@ -46,9 +39,16 @@ const App = () => {
   const relationships = ['Siblings', 'Friends', 'Love', 'Affection', 'Marriage', 'Enemy'];
   const relationshipStatus = relationships[relationshipIndex];
 
-  // Set the relationship status in the state
-  setRelationship(relationshipStatus);
+  return relationshipStatus;
 };
+
+const countCharacterOccurrences = (str) => {
+    const frequencyMap = {};
+    for (let char of str) {
+      frequencyMap[char] = (frequencyMap[char] || 0) + 1;
+    }
+    return frequencyMap;
+  };
 
 
 const clearInputs = () => {
