@@ -47,6 +47,7 @@ const App = () => {
         value={name1}
         onChange={(e) => setName1(e.target.value)}
         placeholder="Enter Name 1"
+        name="name1"
         data-testid="input1"
       />
       <input
@@ -54,6 +55,7 @@ const App = () => {
         value={name2}
         onChange={(e) => setName2(e.target.value)}
         placeholder="Enter Name 2"
+        name="name2"
         data-testid="input2"
       />
       <button onClick={calculateRelationship} data-testid="calculate_relationship">Calculate Relationship</button>
