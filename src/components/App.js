@@ -39,7 +39,8 @@ const App = () => {
   const relationships = ['Siblings', 'Friends', 'Love', 'Affection', 'Marriage', 'Enemy'];
   const relationshipStatus = relationships[relationshipIndex];
 
-  return relationshipStatus;
+    // Update the state with the new relationshipStatus
+    setRelationship(relationshipStatus);
 };
 
 const countCharacterOccurrences = (str) => {
