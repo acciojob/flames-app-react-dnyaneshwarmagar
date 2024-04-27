@@ -9,41 +9,45 @@ const App = () => {
 
     const calculateRelationship = () => {
         const lowerName1 = name1.toLowerCase();
-        const lowerName2 = name2.toLowerCase();
+  const lowerName2 = name2.toLowerCase();
 
-        // Create copies of the names to modify
-        let filteredName1 = lowerName1;
-        let filteredName2 = lowerName2;
+  // Create frequency maps for both names
+  const frequencyMap1 = {};
+  const frequencyMap2 = {};
 
-        // Iterate through each character of name1 and remove it from name2
-        for (let char of lowerName1) {
-            const index = filteredName2.indexOf(char);
-            if (index !== -1) {
-                // If the character exists in name2, remove it
-                filteredName2 = filteredName2.substring(0, index) + filteredName2.substring(index + 1);
-            }
-        }
+  // Populate frequency map for name1
+  for (let char of lowerName1) {
+    frequencyMap1[char] = (frequencyMap1[char] || 0) + 1;
+  }
 
-        // Iterate through each character of name2 and remove it from name1
-        for (let char of lowerName2) {
-            const index = filteredName1.indexOf(char);
-            if (index !== -1) {
-                // If the character exists in name1, remove it
-                filteredName1 = filteredName1.substring(0, index) + filteredName1.substring(index + 1);
-            }
-        }
+  // Populate frequency map for name2
+  for (let char of lowerName2) {
+    frequencyMap2[char] = (frequencyMap2[char] || 0) + 1;
+  }
 
-        // Calculate the sum of the lengths of the remaining strings
-        const totalLength = filteredName1.length + filteredName2.length;
+  // Create copies of the names to modify
+  let filteredName1 = lowerName1;
+  let filteredName2 = lowerName2;
 
-        // Determine the relationship status based on the modulus by 6
-        const relationshipIndex = totalLength % 6;
-        const relationships = ['Siblings', 'Friends', 'Love', 'Affection', 'Marriage', 'Enemy'];
-        const relationshipStatus = relationships[relationshipIndex];
+  // Remove common letters considering occurrence
+  for (let char in frequencyMap1) {
+    if (frequencyMap2[char]) {
+      const minOccurrence = Math.min(frequencyMap1[char], frequencyMap2[char]);
+      filteredName1 = filteredName1.replace(new RegExp(char, 'g'), '').slice(0, minOccurrence);
+      filteredName2 = filteredName2.replace(new RegExp(char, 'g'), '').slice(0, minOccurrence);
+    }
+  }
 
-        // Set the relationship status in the state
-        setRelationship(relationshipStatus);
-   
+  // Calculate the sum of the lengths of the remaining strings
+  const totalLength = filteredName1.length + filteredName2.length;
+
+  // Determine the relationship status based on the modulus by 6
+  const relationshipIndex = totalLength % 6;
+  const relationships = ['Siblings', 'Friends', 'Love', 'Affection', 'Marriage', 'Enemy'];
+  const relationshipStatus = relationships[relationshipIndex];
+
+  // Set the relationship status in the state
+  setRelationship(relationshipStatus);
 };
 
 
