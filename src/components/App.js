@@ -8,80 +8,71 @@ const App = () => {
     const [relationship, setRelationship] = useState('');
 
     const calculateRelationship = () => {
-         // Create frequency maps for both names
-  const frequencyMap1 = countCharacterOccurrences(name1);
-  const frequencyMap2 = countCharacterOccurrences(name2);
+        // Convert names to arrays to manipulate
+        let name1Array = name1.split('');
+        let name2Array = name2.split('');
 
-        let filteredName1 = '';
-  let filteredName2 = '';
+        // Iterate through each character of the first name
+        for (let char of name1Array) {
+            // Check if the character exists in the second name
+            const index = name2Array.indexOf(char);
+            if (index !== -1) {
+                // If the character exists, remove one occurrence from both names
+                name1Array.splice(name1Array.indexOf(char), 1);
+                name2Array.splice(index, 1);
+            }
+        }
 
-  for (let char in frequencyMap1) {
-    if (frequencyMap2[char]) {
-      const minOccurrence = Math.min(frequencyMap1[char], frequencyMap2[char]);
-      filteredName1 += char.repeat(minOccurrence);
-      filteredName2 += char.repeat(minOccurrence);
-    } else {
-      filteredName1 += char.repeat(frequencyMap1[char]);
-    }
-  }
+        // Calculate the sum of the lengths of the remaining characters in both names
+        const totalLength = name1Array.length + name2Array.length;
 
-  for (let char in frequencyMap2) {
-    if (!frequencyMap1[char]) {
-      filteredName2 += char.repeat(frequencyMap2[char]);
-    }
-  }
+        // Determine the relationship status based on the total length modulus 6
+        const relationshipIndex = totalLength % 6;
+        const relationships = ['Siblings', 'Friends', 'Love', 'Affection', 'Marriage', 'Enemy'];
+        const relationshipStatus = relationships[relationshipIndex];
 
-  // Calculate the sum of the lengths of the remaining strings
-  const totalLength = filteredName1.length + filteredName2.length;
+        setRelationship(relationshipStatus);
+    };
 
-  // Determine the relationship status based on the modulus by 6
-  const relationshipIndex = totalLength % 6;
-  const relationships = ['Siblings', 'Friends', 'Love', 'Affection', 'Marriage', 'Enemy'];
-  const relationshipStatus = relationships[relationshipIndex];
-
-    // Update the state with the new relationshipStatus
-    setRelationship(relationshipStatus);
-};
-
-const countCharacterOccurrences = (str) => {
-    const frequencyMap = {};
-    for (let char of str) {
-      frequencyMap[char] = (frequencyMap[char] || 0) + 1;
-    }
-    return frequencyMap;
-  };
+    const countCharacterOccurrences = (str) => {
+        const frequencyMap = {};
+        for (let char of str) {
+            frequencyMap[char] = (frequencyMap[char] || 0) + 1;
+        }
+        return frequencyMap;
+    };
 
 
-const clearInputs = () => {
-    setName1('');
-    setName2('');
-    setRelationship('');
-};
+    const clearInputs = () => {
+        setName1('');
+        setName2('');
+        setRelationship('');
+    };
 
-return (
-    <div className="App" id='main'>
-        <h1>FLAMES Game</h1>
-        <input
-            type="text"
-            value={name1}
-            onChange={(e) => setName1(e.target.value)}
-            placeholder="Enter Name 1"
-            name="name1"
-            data-testid="input1"
-        />
-        <input
-            type="text"
-            value={name2}
-            onChange={(e) => setName2(e.target.value)}
-            placeholder="Enter Name 2"
-            name="name2"
-            data-testid="input2"
-        />
-        <button onClick={calculateRelationship} data-testid="calculate_relationship">Calculate Relationship</button>
-        <button onClick={clearInputs} data-testid="clear">Clear</button>
-        <h3 data-testid="answer">{relationship}</h3>
-    </div>
-);
+    return (
+        <div className="App" id='main'>
+            <h1>FLAMES Game</h1>
+            <input
+                type="text"
+                value={name1}
+                onChange={(e) => setName1(e.target.value)}
+                placeholder="Enter Name 1"
+                name="name1"
+                data-testid="input1"
+            />
+            <input
+                type="text"
+                value={name2}
+                onChange={(e) => setName2(e.target.value)}
+                placeholder="Enter Name 2"
+                name="name2"
+                data-testid="input2"
+            />
+            <button onClick={calculateRelationship} data-testid="calculate_relationship">Calculate Relationship</button>
+            <button onClick={clearInputs} data-testid="clear">Clear</button>
+            <h3 data-testid="answer">{relationship}</h3>
+        </div>
+    );
 };
 
 export default App;
